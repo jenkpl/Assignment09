@@ -25,16 +25,20 @@ window.addEventListener('load', () => {
 //     }
 
 // GET DOM ELEMENTS
-let Eform = document.querySelector('#addForm');
-let empTable = document.querySelector('#employees');
+let Eform       = document.querySelector('#addForm');
+let empTable    = document.querySelector('#employees');
+let empCount    = document.querySelector('#empCount');
     
 // BUILD THE EMPLOYEES TABLE WHEN THE PAGE LOADS
 window.addEventListener('load', init => {
-let grid = document.getElementsByTagName('TBODY');
-let newRow = grid.createElement("TR");
+let grid = document.querySelector('tbody');
+let newRow = grid.appendChild(createElement("TR"));
 let newCell = document.newRow.createElement("TD");
 newCell.appendChild(document.createTextNode('testID'));
 document.createElement('P').createTextNode('Testing123');
+let count = employees.length;
+console.log(count);
+empCount.value = `(${count})`;
 });
 
 // ADD EMPLOYEE
@@ -53,8 +57,49 @@ Eform.addEventListener('submit', (e) => {
     employees.push(newEmp);
     console.table(employees);
     // BUILD THE GRID
-    let grid = document.getElementsByTagName('TBODY');
-    grid.innerHTML = `
+    buildGrid();
+    // RESET THE FORM
+    document.querySelector('#addForm').reset();
+    // SET FOCUS BACK TO THE ID TEXT BOX
+    document.querySelector('#id').focus();
+});
+
+// DELETE EMPLOYEE
+let deleteBtn = document.createElement('button');
+deleteBtn.className = 'btn btn-sm btn-danger delete';
+deleteBtn.appendChild(document.createTextNode('X'));
+newRow.appendChild(deleteBtn);
+empTable.addEventListener('click', (e) => {
+    // CONFIRM THE DELETE
+        if (e.target.classList.contains('delete')) {
+        if (confirm('Are you sure you want to delete this employee?')) {
+        // GET THE SELECTED ROWINDEX FOR THE TR (PARENTNODE.PARENTNODE)
+        // CALL DELETEROW() METHOD TO DELETE SPECIFIC ROW IN THE TABLE
+        empTable.deleteRow(e.target.parentElement.parentElement.rowIndex);
+        
+        // REMOVE EMPLOYEE FROM ARRAY
+
+        // BUILD THE GRID
+        buildGrid();
+}});
+
+// BUILD THE EMPLOYEES GRID
+function buildGrid() {
+    // let grid = document.getElementsByTagName('TBODY');
+    // grid.innerHTML = `
+    // <tr>
+    // <td>${empID}</td>
+    // <td>${empName}</td>
+    // <td>${empExt}</td>
+    // <td>${empEmail}</td>
+    // <td>${empDept}</td>
+    // </tr>
+    // `;
+    // REMOVE THE EXISTING SET OF ROWS BY REMOVING THE ENTIRE TBODY SECTION
+    let grid = document.querySelector('tbody');
+    grid.innerHTML.remove();
+    // REBUILD THE TBODY FROM SCRATCH
+  grid.innerHTML = `
     <tr>
     <td>${empID}</td>
     <td>${empName}</td>
@@ -63,36 +108,10 @@ Eform.addEventListener('submit', (e) => {
     <td>${empDept}</td>
     </tr>
     `;
-    // RESET THE FORM
-    document.querySelector('#addForm').reset();
-    // SET FOCUS BACK TO THE ID TEXT BOX
-    document.querySelector('#id').focus();
-});
-
-// DELETE EMPLOYEE
-empTable.addEventListener('click', (e) => {
-    // CONFIRM THE DELETE
-
-        // GET THE SELECTED ROWINDEX FOR THE TR (PARENTNODE.PARENTNODE)
-
-        // CALL DELETEROW() METHOD TO DELETE SPECIFIC ROW IN THE TABLE
-
-        // REMOVE EMPLOYEE FROM ARRAY
-
-        // BUILD THE GRID
-
-});
-
-// BUILD THE EMPLOYEES GRID
-function buildGrid() {
-    // REMOVE THE EXISTING SET OF ROWS BY REMOVING THE ENTIRE TBODY SECTION
-
-    // REBUILD THE TBODY FROM SCRATCH
-
     // LOOP THROUGH THE ARRAY OF EMPLOYEES
     // REBUILDING THE ROW STRUCTURE
-
-
+    // let i = (employees.length - 1);
+    
     // BIND THE TBODY TO THE EMPLOYEE TABLE
 
     // UPDATE EMPLOYEE COUNT
